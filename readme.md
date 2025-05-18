@@ -8,10 +8,9 @@
 - 必須用到 Canvas
 - 必須用到 WebGL
 
-## Video 🐻💥
+## Demo 🐻💥
 
-<video src="./game.mp4" autoplay muted loop playsinline style="width: 100%; max-width: 800px;" controls></video>
-
+![demo](./game.gif)
 
 ## Author🐶
 
