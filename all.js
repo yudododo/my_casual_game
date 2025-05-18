@@ -20,6 +20,11 @@ let keys = {
   left: false,
   right: false,
 };
+let level = parseInt(localStorage.getItem("level") || "1");
+let levelThreshold = 20;
+let rockSpawnRate = 0.05;
+
+document.getElementById("level").innerText = level;
 document.getElementById("highScore").innerText = highScore;
 
 // ===== 共用 Shader Program =====
@@ -83,7 +88,7 @@ function spawnRock() {
     x: Math.random() * width,
     y: -20,
     size: 20 + Math.random() * 30,
-    speed: 2 + Math.random() * 3,
+    speed: 2 + Math.random() * 3 + level * 0.2,
     scored: false,
   });
 }
@@ -109,6 +114,16 @@ function update() {
       rock.scored = true;
       score++;
       document.getElementById("score").innerText = score;
+
+      // 升級邏輯
+      if (score % levelThreshold === 0) {
+        level++;
+        localStorage.setItem("level", level);
+        document.getElementById("level").innerText = level;
+
+        // 變更難度（增加掉落速度或生成機率）
+        rockSpawnRate = Math.min(0.2, rockSpawnRate + 0.01);
+      }
     }
 
     if (
@@ -121,8 +136,8 @@ function update() {
   }
 
   rocks = rocks.filter((r) => r.y < height);
-  if (Math.random() < 0.05) spawnRock();
-  
+  if (Math.random() < rockSpawnRate) spawnRock();
+
   draw();
   requestAnimationFrame(update);
 }
@@ -176,10 +191,12 @@ function gameOver() {
 
 function restartGame() {
   score = 0;
+  level = 1;
   rocks = [];
   isGameOver = false;
   document.getElementById("score").innerText = "0";
   document.getElementById("gameOver").style.display = "none";
+  document.getElementById("level").innerText = "1";
   update();
 }
 
@@ -188,13 +205,28 @@ window.addEventListener("mousemove", (e) => {
 });
 
 window.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft" ) keys.left = true;
+  if (e.key === "ArrowLeft") keys.left = true;
   if (e.key === "ArrowRight") keys.right = true;
 });
 
 window.addEventListener("keyup", (e) => {
-  if (e.key === "ArrowLeft" ) keys.left = false;
-  if (e.key === "ArrowRight" ) keys.right = false;
+  if (e.key === "ArrowLeft") keys.left = false;
+  if (e.key === "ArrowRight") keys.right = false;
+});
+
+let touchX = null;
+window.addEventListener("touchstart", (e) => {
+  touchX = e.touches[0].clientX;
+});
+
+window.addEventListener("touchmove", (e) => {
+  const currentX = e.touches[0].clientX;
+  const dx = currentX - touchX;
+
+  player.x += dx;
+  player.x = Math.max(player.size / 2, Math.min(width - player.size / 2, player.x));
+
+  touchX = currentX;
 });
 
 update();
