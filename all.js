@@ -197,6 +197,7 @@ function restartGame() {
   level = 1;
   rocks = [];
   isGameOver = false;
+  rockSpawnRate = 0.05;
   document.getElementById("score").innerText = "0";
   document.getElementById("gameOver").style.display = "none";
   document.getElementById("level").innerText = "1";
