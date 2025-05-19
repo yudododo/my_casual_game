@@ -20,7 +20,7 @@ let keys = {
   left: false,
   right: false,
 };
-let level = parseInt(localStorage.getItem("level") || "1");
+let level = "1";
 let levelThreshold = 20;
 let rockSpawnRate = 0.05;
 
@@ -142,6 +142,7 @@ function update() {
 
   draw();
   requestAnimationFrame(update);
+  console.log("rockSpawnRate:", rockSpawnRate);
 }
 
 function drawRect(x, y, size, color, gradient = false) {
