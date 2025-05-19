@@ -122,7 +122,9 @@ function update() {
         document.getElementById("level").innerText = level;
 
         // 變更難度（增加掉落速度或生成機率）
-        rockSpawnRate = Math.min(0.2, rockSpawnRate + 0.01);
+        // rockSpawnRate = Math.min(0.2, rockSpawnRate + 0.01);
+        rockSpawnRate += 0.01;
+
       }
     }
 
